@@ -1,9 +1,20 @@
 document.addEventListener('DOMContentLoaded', startGame)
 
 // Define your `board` object here!
-// var board = 
+var cols = [0,1,2];
+var rows = [0,1,2];
+var cells = [rows[cols]]
+var board = {cells:[{row:0,col:0,isMine:false,hidden:true,isMarked:true},{row:0,col:1,isMine:true,hidden:true,isMarked:true},{row:1,col:0,isMine:true,hidden:true,isMarked:true},{row:1,col:1,isMine:true,hidden:true,isMarked:true}]};
 
 function startGame () {
+	for(var i=0; i<board.cells.length; i++){
+		var sm = countSurroundingMines(board.cells[i]);
+		board.cells[i].SurroundingMines= sm;
+		console.log ("cell number "+ i + "has this many mines " + sm)
+		document.addEventListener('contexmenu', checkForWin);
+		document.addEventListener('click', checkForWin); //click or contexmenu??
+	}
+
   // Don't remove this function call: it makes the game work!
   lib.initBoard()
 }
@@ -13,10 +24,18 @@ function startGame () {
 // 1. Are all of the cells that are NOT mines visible?
 // 2. Are all of the mines marked?
 function checkForWin () {
+for(var x = 0; x<board.cells.length;x++){
+if(board.cells[x].isMine === true && board.cells[x].isMarked === false){
+	return;
+	}else if(board.cells[x].isMine === false && board.cells[x].hidden === true){
+		return;
+	}
 
+}
+	
   // You can use this function call to declare a winner (once you've
   // detected that they've won, that is!)
-  //   lib.displayMessage('You win!')
+  lib.displayMessage('You win!')
 }
 
 // Define this function to count the number of mines around the cell
@@ -24,9 +43,19 @@ function checkForWin () {
 // cells yourself! Just use `lib.getSurroundingCells`: 
 //
 //   var surrounding = lib.getSurroundingCells(cell.row, cell.col)
-//
+
 // It will return cell objects in an array. You should loop through 
 // them, counting the number of times `cell.isMine` is true.
 function countSurroundingMines (cell) {
+	var surroundingCells = lib.getSurroundingCells(cell.row, cell.col)
+var count = 0;
+for(var j=0; j<surroundingCells.length; j++){
+	if(surroundingCells[j].isMine === true){
+		count++
+	}
+	//console.log ("count is: "+count)
+}return count
+
 }
+
 
